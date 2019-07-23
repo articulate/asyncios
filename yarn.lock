@@ -989,10 +989,10 @@ create-hmac@^1.1.0, create-hmac@^1.1.2, create-hmac@^1.1.4:
     safe-buffer "^5.0.1"
     sha.js "^2.4.8"
 
-crocks@^0.9.4:
-  version "0.9.4"
-  resolved "https://registry.yarnpkg.com/crocks/-/crocks-0.9.4.tgz#bc4e13da4b3173a8e48af0a620dc83ee7c4b22b0"
-  integrity sha512-iREmN0zHcPibmgP13F/z+PgR7R5Sam4Uf57jsp9Erdvj8dI7EMUHb1bj7mugnX0sGVA6ukAxw2bTuJ+xTad7Vw==
+crocks@^0.12.3:
+  version "0.12.3"
+  resolved "https://registry.yarnpkg.com/crocks/-/crocks-0.12.3.tgz#048e3d84d21347abfc3b843562d9dc1de916cb12"
+  integrity sha512-sHLgwOLI6BNrtir62is9yXnrzdIo6Q6Qr4Yhy6SabAdvbFbppDEQhawnu9FGJkwGmmntEebUIKAIkjkHj+fj0A==
 
 cross-spawn@^6.0.0, cross-spawn@^6.0.5:
   version "6.0.5"
