@@ -1,6 +1,6 @@
 {
   "name": "@articulate/asyncios",
-  "version": "1.0.0-rc1",
+  "version": "1.0.0",
   "description": "A wrapper for promise-based library Axios into a crocks Async",
   "main": "index.js",
   "repository": "git@github.com:articulate/asyncios.git",
