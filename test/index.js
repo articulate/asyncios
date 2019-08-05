@@ -1,43 +1,50 @@
-const asyncios = require('..')
-const axios = require('axios')
-const { expect } = require('chai')
-const { createFakeServer } = require('sinon')
+var asyncios = require('..')
+var axios = require('axios')
+var chai = require('chai')
+var sinon = require('sinon')
 
-const unexpected = message => done => () =>
-  done(new Error(message))
+var expect = chai.expect
 
-const unexpectedSuccess =
+function unexpected (message) {
+  return function (done) {
+    return function () {
+      done(new Error(message))
+    }
+  }
+}
+
+var unexpectedSuccess =
   unexpected('Unexpected success')
 
-const unexpectedCancel =
+var unexpectedCancel =
   unexpected('Unexpected cancel')
 
-describe('asyncios', () => {
-  let server
+describe('asyncios', function () {
+  var server
 
-  beforeEach(() => {
-    server = createFakeServer()
+  beforeEach(function () {
+    server = sinon.createFakeServer()
     server.autoRespond = true
     server.autoRespondAfter = 500
   })
 
-  afterEach(() => {
+  afterEach(function () {
     server.restore()
   })
 
-  it('is lazy', () => {
+  it('is lazy', function () {
     asyncios({ method: 'GET', url: '/foo/bar' })
     expect(server.requests).to.be.empty
   })
 
-  it('resolves a GET 200', done => {
+  it('resolves a GET 200', function (done) {
     server.respondWith('GET', '/foo/bar', [
       200,
       { 'Content-Type': 'application/json' },
       '{ "foo": "bar" }'
     ])
 
-    const expectation = res => {
+    var expectation = function (res) {
       try {
         expect(res).to.have.property('data')
           .that.deep.equals({ foo: 'bar' })
@@ -54,14 +61,14 @@ describe('asyncios', () => {
       .fork(done, expectation, unexpectedCancel(done))
   })
 
-  it('resolves a POST 200', done => {
+  it('resolves a POST 200', function (done) {
     server.respondWith('POST', '/foo/bar', [
       200,
       { 'Content-Type': 'application/json' },
       '{ "foo": "bar" }'
     ])
 
-    const expectation = res => {
+    var expectation = function (res) {
       try {
         expect(res).to.have.property('data')
           .that.deep.equals({ foo: 'bar' })
@@ -78,8 +85,8 @@ describe('asyncios', () => {
       .fork(done, expectation, unexpectedCancel(done))
   })
 
-  it('rejects 404', done => {
-    const expectation = err => {
+  it('rejects 404', function (done) {
+    var expectation = function (err) {
       try {
         expect(err).to.have.property('response')
           .that.has.property('status', 404)
@@ -96,14 +103,14 @@ describe('asyncios', () => {
       .fork(expectation, unexpectedSuccess(done), unexpectedCancel(done))
   })
 
-  it('rejects 400', done => {
+  it('rejects 400', function (done) {
     server.respondWith('GET', '/foo/bar', [
       400,
       { 'Content-Type': 'application/json' },
       '{ "foo": "bar" }'
     ])
 
-    const expectation = err => {
+    var expectation = function (err) {
       try {
         expect(err).to.have.property('response')
         expect(err.response).to.have.property('status', 400)
@@ -122,14 +129,14 @@ describe('asyncios', () => {
       .fork(expectation, unexpectedSuccess(done), unexpectedCancel(done))
   })
 
-  it('rejects 500', done => {
+  it('rejects 500', function (done) {
     server.respondWith('GET', '/foo/bar', [
       500,
       { 'Content-Type': 'application/json' },
       '{ "foo": "bar" }'
     ])
 
-    const expectation = err => {
+    var expectation = function (err) {
       try {
         expect(err).to.have.property('response')
         expect(err.response).to.have.property('status', 500)
@@ -148,14 +155,14 @@ describe('asyncios', () => {
       .fork(expectation, unexpectedSuccess(done), unexpectedCancel(done))
   })
 
-  it('cancels via Async before request', done => {
+  it('cancels via Async before request', function (done) {
     server.respondWith('GET', '/foo/bar', [
       200,
       { 'Content-Type': 'application/json' },
       '{ "foo": "bar" }'
     ])
 
-    const expectation = res => {
+    var expectation = function (res) {
       try {
         expect(res).to.be.undefined
         expect(server.requests).to.be.empty
@@ -165,20 +172,20 @@ describe('asyncios', () => {
       }
     }
 
-    const cancel = asyncios({ method: 'GET', url: '/foo/bar' })
+    var cancel = asyncios({ method: 'GET', url: '/foo/bar' })
       .fork(done, unexpectedSuccess(done), expectation)
 
     cancel()
   })
 
-  it('cancels via Async before response', done => {
+  it('cancels via Async before response', function (done) {
     server.respondWith('GET', '/foo/bar', [
       200,
       { 'Content-Type': 'application/json' },
       '{ "foo": "bar" }'
     ])
 
-    const expectation = res => {
+    var expectation = function (res) {
       try {
         expect(res).to.be.undefined
         expect(server.requests).to.have.lengthOf(1)
@@ -190,20 +197,20 @@ describe('asyncios', () => {
       }
     }
 
-    const cancel = asyncios({ method: 'GET', url: '/foo/bar' })
+    var cancel = asyncios({ method: 'GET', url: '/foo/bar' })
       .fork(done, unexpectedSuccess(done), expectation)
 
     setTimeout(cancel, 250)
   })
 
-  it('cannot cancel via Async after response', done => {
+  it('cannot cancel via Async after response', function (done) {
     server.respondWith('GET', '/foo/bar', [
       200,
       { 'Content-Type': 'application/json' },
       '{ "foo": "bar" }'
     ])
 
-    const expectation = res => {
+    var expectation = function (res) {
       try {
         expect(res).to.have.property('data')
           .that.deep.equals({ foo: 'bar' })
@@ -217,20 +224,20 @@ describe('asyncios', () => {
       }
     }
 
-    const cancel = asyncios({ method: 'GET', url: '/foo/bar' })
+    var cancel = asyncios({ method: 'GET', url: '/foo/bar' })
       .fork(done, expectation, unexpectedCancel(done))
 
     setTimeout(cancel, 750)
   })
 
-  it('cancels via token before request', done => {
+  it('cancels via token before request', function (done) {
     server.respondWith('GET', '/foo/bar', [
       200,
       { 'Content-Type': 'application/json' },
       '{ "foo": "bar" }'
     ])
 
-    const expectation = res => {
+    var expectation = function (res) {
       try {
         expect(axios.isCancel(res)).to.be.true
         expect(res).to.have.property('message', 'cancel!')
@@ -241,7 +248,7 @@ describe('asyncios', () => {
       }
     }
 
-    const source = axios.CancelToken.source()
+    var source = axios.CancelToken.source()
 
     asyncios({ method: 'GET', url: '/foo/bar', cancelToken: source.token })
       .fork(expectation, unexpectedSuccess(done), unexpectedCancel(done))
@@ -249,14 +256,14 @@ describe('asyncios', () => {
     source.cancel('cancel!')
   })
 
-  it('cancels via token before response', done => {
+  it('cancels via token before response', function (done) {
     server.respondWith('GET', '/foo/bar', [
       200,
       { 'Content-Type': 'application/json' },
       '{ "foo": "bar" }'
     ])
 
-    const expectation = res => {
+    var expectation = function (res) {
       try {
         expect(axios.isCancel(res)).to.be.true
         expect(res).to.have.property('message', 'cancel!')
@@ -269,22 +276,22 @@ describe('asyncios', () => {
       }
     }
 
-    const source = axios.CancelToken.source()
+    var source = axios.CancelToken.source()
 
     asyncios({ method: 'GET', url: '/foo/bar', cancelToken: source.token })
       .fork(expectation, unexpectedSuccess(done), unexpectedCancel(done))
 
-    setTimeout(() => source.cancel('cancel!'), 250)
+    setTimeout(function () { source.cancel('cancel!') }, 250)
   })
 
-  it('cannot cancel via token after response', done => {
+  it('cannot cancel via token after response', function (done) {
     server.respondWith('GET', '/foo/bar', [
       200,
       { 'Content-Type': 'application/json' },
       '{ "foo": "bar" }'
     ])
 
-    const expectation = res => {
+    var expectation = function (res) {
       try {
         expect(res).to.have.property('data')
           .that.deep.equals({ foo: 'bar' })
@@ -298,11 +305,11 @@ describe('asyncios', () => {
       }
     }
 
-    const source = axios.CancelToken.source()
+    var source = axios.CancelToken.source()
 
     asyncios({ method: 'GET', url: '/foo/bar', cancelToken: source.token })
       .fork(done, expectation, unexpectedCancel(done))
 
-    setTimeout(() => source.cancel('cancel!'), 750)
+    setTimeout(function () { source.cancel('cancel!') }, 750)
   })
 })

@@ -13,7 +13,8 @@
     "test:watch": "karma start"
   },
   "dependencies": {
-    "crocks": "^0.12.3"
+    "crocks": "^0.12.3",
+    "lodash.assign": "^4.2.0"
   },
   "peerDependencies": {
     "axios": ">=0.16.0"
@@ -24,6 +25,7 @@
     "chai": "^4.2.0",
     "eslint": "^6.0.1",
     "eslint-config-standard": "^13.0.1",
+    "eslint-plugin-es5": "^1.4.1",
     "eslint-plugin-import": "^2.18.1",
     "eslint-plugin-node": "^9.1.0",
     "eslint-plugin-promise": "^4.2.1",
