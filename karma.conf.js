@@ -9,7 +9,9 @@ module.exports = function (config) {
 
     // frameworks to use
     // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-    frameworks: ['browserify', 'mocha'],
+    frameworks: ['browserify', 'polyfill', 'mocha'],
+
+    polyfill: ['Promise'],
 
     // list of files / patterns to load in the browser
     files: [
