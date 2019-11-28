@@ -1,6 +1,6 @@
 # asyncios
 
-A [crocks Async](https://crocks.dev/docs/crocks/Async.html) wrapper for [axios](https://github.com/axios/axios). Allows consumers to take advantage of the "lazy" data type while keeping a familiary API.
+A [crocks Async](https://crocks.dev/docs/crocks/Async.html) wrapper for [axios](https://github.com/axios/axios). Allows consumers to take advantage of the "lazy" data type while keeping a familiar API.
 
 ## How to Use
 
