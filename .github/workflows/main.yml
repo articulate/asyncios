@@ -1,0 +1,19 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repo under GH workspace
+      uses: actions/checkout@v4
+
+    - name: install
+      uses: ./.github/actions/install
+
+    - name: Lint and test
+      run: yarn run lint && yarn run test
