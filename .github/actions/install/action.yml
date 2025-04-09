@@ -1,0 +1,31 @@
+name: Install
+
+runs:
+  using: composite
+  steps:
+    - name: Use nodejs
+      uses: actions/setup-node@v4
+      with:
+        node-version: '22.x'
+        cache: 'yarn'
+
+    - name: Install Yarn v1.22
+      run: npm install -g yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140.56.3bb3137e
+      shell: bash
+
+    - name: Get npm cache directory path
+      id: npm-cache-dir-path
+      run: echo "dir=$(npm config get cache)" >> $GITHUB_OUTPUT
+      shell: bash
+
+    - name: Restore npm cache
+      uses: actions/cache@v3
+      with:
+        path: ${{ steps.npm-cache-dir-path.outputs.dir }}
+        key: npm-cache-folder-${{ hashFiles('**/yarn.lock') }}
+        restore-keys: |
+          npm-cache-folder-
+
+    - name: Install dependencies
+      run: yarn install --pure-lockfile --ignore-scripts
+      shell: bash
