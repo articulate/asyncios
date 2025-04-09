@@ -10,8 +10,8 @@ function asyncios (params) {
     params
   )
 
-  return new Async(function (reject, resolve) {
-    axios(opts).then(resolve).catch(reject)
+  return Async(function (reject, resolve) {
+    axios(opts).then(resolve, reject)
     return cancelTokenSource.cancel.bind(cancelTokenSource)
   })
 }
