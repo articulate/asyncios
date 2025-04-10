@@ -14,8 +14,7 @@
     "test:watch": "karma start"
   },
   "dependencies": {
-    "crocks": "^0.12.3",
-    "lodash.assign": "^4.2.0"
+    "crocks": "^0.12.3"
   },
   "peerDependencies": {
     "axios": ">=0.16.0"
