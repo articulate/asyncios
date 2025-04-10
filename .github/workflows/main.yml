@@ -12,7 +12,7 @@ jobs:
     - name: Checkout repo under GH workspace
       uses: actions/checkout@v4
 
-    - name: install
+    - name: Install
       uses: ./.github/actions/install
 
     - name: Lint and test
