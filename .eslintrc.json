@@ -1,11 +1,6 @@
 {
-  "plugins": [
-    "es5"
-  ],
-  "extends": [
-    "standard",
-    "plugin:es5/no-es2015"
-  ],
+  "plugins": [],
+  "extends": ["standard"],
   "env": {
     "browser": true,
     "commonjs": true,

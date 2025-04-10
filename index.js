@@ -1,11 +1,10 @@
 var Async = require('crocks/Async')
-var assign = require('lodash.assign')
 var axios = require('axios')
 
 function asyncios (params) {
   var cancelTokenSource = axios.CancelToken.source()
 
-  var opts = assign(
+  var opts = Object.assign(
     { cancelToken: cancelTokenSource.token },
     params
   )
