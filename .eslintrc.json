@@ -1,9 +1,0 @@
-{
-  "plugins": [],
-  "extends": ["standard"],
-  "env": {
-    "browser": true,
-    "commonjs": true,
-    "node": false
-  }
-}

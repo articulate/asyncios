@@ -1,0 +1,55 @@
+name: Build
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+
+jobs:
+  check-js:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code repository
+        uses: actions/checkout@v5
+
+      - name: Install
+        uses: ./.github/actions/install
+
+      - name: Check for JS lint issues
+        run: pnpm run check:js
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code repository
+        uses: actions/checkout@v5
+
+      - name: Install
+        uses: ./.github/actions/install
+
+      - name: Build JS
+        run: pnpm run build
+
+  check-fmt:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code repository
+        uses: actions/checkout@v5
+
+      - name: Install
+        uses: ./.github/actions/install
+
+      - name: Check for code formatting issues
+        run: pnpm run check:fmt
+
+  check-types:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code repository
+        uses: actions/checkout@v5
+
+      - name: Install
+        uses: ./.github/actions/install
+
+      - name: Check types
+        run: pnpm run check:types

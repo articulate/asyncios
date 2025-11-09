@@ -1,0 +1,7 @@
+.changeset/
+.claude/
+.git/
+.pnpm-store/
+dist/
+node_modules/
+pnpm-lock.yaml

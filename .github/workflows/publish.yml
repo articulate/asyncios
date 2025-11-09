@@ -1,30 +1,36 @@
-name: Release
+name: Publish
 
 on:
-  push:
-    branches: [master, main]
+  workflow_run:
+    branches: [master]
+    workflows: [Build]
+    types: [completed]
 
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 
+permissions:
+  contents: write
+  id-token: write
+  pull-requests: write
+
 jobs:
-  release:
-    name: Release
+  npm:
     runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
       - name: Checkout repo under GH workspace
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Install
         uses: ./.github/actions/install
-
-      - name: Lint and test
-        run: yarn run lint && yarn run test
+        with:
+          npm-token: ${{ secrets.NPM_TOKEN }}
 
       - name: Create Release Pull Request or Publish to npm
         id: changesets
         uses: changesets/action@v1
         with:
-          publish: yarn run release
+          publish: pnpm run release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN_PUBLISH }}

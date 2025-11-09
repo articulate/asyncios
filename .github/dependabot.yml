@@ -1,0 +1,28 @@
+version: 2
+
+registries:
+  npm:
+    type: 'npm-registry'
+    url: 'https://registry.npmjs.org/'
+
+updates:
+  - package-ecosystem: 'github-actions'
+    directory: '/'
+    schedule:
+      interval: 'monthly'
+
+  - package-ecosystem: 'npm'
+    allow:
+      - dependency-type: 'direct'
+    directory: '/'
+    open-pull-requests-limit: 5
+    registries:
+      - npm
+    schedule:
+      interval: 'monthly'
+    versioning-strategy: 'increase'
+    groups:
+      dev-dependencies:
+        dependency-type: 'development'
+        patterns:
+          - '*'

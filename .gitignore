@@ -1,5 +1,7 @@
+.cache/
+.claude/settings.local.json
+.pnpm-store/
+dist/
+node_modules/
 *.log
 .DS_Store
-.nyc_output
-.yarn*
-node_modules
